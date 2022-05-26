@@ -3,17 +3,19 @@ import NoteContext from '../context/notes/NoteContext';
 
 const AddNote = () => {
     const context = useContext(NoteContext);
-    const { addNote } = context;
+    const { addNote, showAlert } = context;
     const [note, setNote] = useState({ title: "", description: "", tag: "" })
     const addnote = (e) => {
         e.preventDefault();
         addNote(note.title, note.description, note.tag)
+        showAlert("Note Added", "success")
     }
     const onChange = (e) => {
         setNote({ ...note, [e.target.name]: e.target.value })
     }
     const clearnote = () =>{
         document.getElementById("note-form").reset();
+        showAlert("Cleared Note", "danger");
     }
     return (
         <div>
@@ -34,8 +36,8 @@ const AddNote = () => {
                     <label htmlFor="description" className="form-label">Description</label>
                 </div>
             </form>
-            <button type="submit" className="btn btn-success" onClick={addnote}>Add Note</button>
-            <button type="reset" className="btn btn-danger float-end" onClick={clearnote}>Clear All</button>
+            <button type="submit" className="btn btn-success" onClick={addnote} id="liveToastBtn">Add Note</button>
+            <button type="reset" className="btn btn-danger float-end" onClick={clearnote} id="liveToastBtn">Clear All</button>
         </div>
     )
 }

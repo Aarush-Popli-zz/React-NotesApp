@@ -58,6 +58,16 @@ const NoteState = (props) =>{
             "__v": 0
         }
     ]
+    const [alert, setAlert] = useState(null);
+    const showAlert= (message, type)=>{
+        setAlert({
+            msg: message,
+            type: type
+        })
+        setTimeout(() => {
+            setAlert(null);
+        }, 1000);
+    }
     const [notes, setNotes] = useState(notesInitial)
 
     const addNote = (title, description, tag) =>{
@@ -74,14 +84,15 @@ const NoteState = (props) =>{
     }
 
     const deleteNote = (id) =>{
-      
+        const newNotes = notes.filter((notes)=>{return notes._id !== id})
+        setNotes(newNotes)
     }
 
-    const editNote = (id) =>{
+    const editNote = (id, title, description, tag) =>{
       
     }
     return (
-        <NoteContext.Provider value={{notes, addNote, editNote, deleteNote}}>
+        <NoteContext.Provider value={{notes, addNote, editNote, deleteNote, showAlert, alert}}>
             {props.children}
         </NoteContext.Provider>
     )

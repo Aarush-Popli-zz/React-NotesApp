@@ -25,7 +25,6 @@ const NoteState = (props) =>{
             }
         });
         const json = await response.json();
-        console.log(json);
         setNotes(json);
     }
 
@@ -38,19 +37,9 @@ const NoteState = (props) =>{
             },
             body: JSON.stringify({title, description, tag})
         });
-        const json = await response.json();
-        
-        let note = {
-            "_id": "6289136ac84a3cb875f0cfbc",
-            "user": "6288cc44ae77f60b46fb405a",
-            "title": title,
-            "description": description,
-            "tag": tag,
-            "date": "2022-05-21T16:29:30.332Z",
-            "__v": 0
-        }
-        setNotes(notes.concat(note))
-        console.log(json)
+        // eslint-disable-next-line
+        const note = await response.json();
+        setNotes(notes.concat(note));
     }
 
     const deleteNote = async (id) =>{
@@ -61,32 +50,35 @@ const NoteState = (props) =>{
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI4OGNjNDRhZTc3ZjYwYjQ2ZmI0MDVhIn0sImlhdCI6MTY1MzEzNjc1Mn0.gbebe88KS49OzYrHrfkEL6iULt9tuUHx0O5goDNg7gE'
             }
         });
-        const json = response.json();
-        console.log(json)
+        // eslint-disable-next-line
+        const json = await response.json();
         const newNotes = notes.filter((notes)=>{return notes._id !== id})
         setNotes(newNotes)
     }
 
     const editNote = async (id, title, description, tag) =>{
         const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjI4OGNjNDRhZTc3ZjYwYjQ2ZmI0MDVhIn0sImlhdCI6MTY1MzEzNjc1Mn0.gbebe88KS49OzYrHrfkEL6iULt9tuUHx0O5goDNg7gE'
             },
             body: JSON.stringify({title, description, tag})
         });
-        const json = response.json();
+        // eslint-disable-next-line
+        const json = await response.json();
         
+        let newNotes = JSON.parse(JSON.stringify(notes));
         for (let index = 0; index < notes.length; index++) {
             const element = notes[index];
             if(element._id === id){
-                element.title = title;
-                element.description = description;
-                element.tag = tag;
+                newNotes[index].title = title;
+                newNotes[index].description = description;
+                newNotes[index].tag = tag;
+                break;
             } 
         }
-        console.log(json)
+        setNotes(newNotes);
     }
     return (
         <NoteContext.Provider value={{notes, addNote, editNote, deleteNote, getNote, showAlert, alert}}>

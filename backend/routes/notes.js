@@ -16,7 +16,7 @@ router.get('/fetchallnotes', fetchuser, async (req, res)=>{
 
 router.post('/addnote', fetchuser, [
     body('title', 'Enter a valid title').isLength({ min: 3 }),
-    body('description', 'Description must be atleast 10 characters').isLength({ min: 10}),
+    body('description', 'Description must be atleast 5 characters').isLength({ min: 5}),
 ], async (req, res)=>{
     try{
         const {title, description, tag} = req.body;
@@ -39,7 +39,7 @@ router.post('/addnote', fetchuser, [
 
 router.put('/updatenote/:id', fetchuser, [
     body('title', 'Enter a valid title').isLength({ min: 3 }),
-    body('description', 'Description must be atleast 10 characters').isLength({ min: 10}),
+    body('description', 'Description must be atleast 5 characters').isLength({ min: 5}),
 ], async (req, res)=>{
     try{
         const {title, description, tag} = req.body;

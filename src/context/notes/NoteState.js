@@ -53,7 +53,8 @@ const NoteState = (props) =>{
         // eslint-disable-next-line
         const json = await response.json();
         const newNotes = notes.filter((notes)=>{return notes._id !== id})
-        setNotes(newNotes)
+        setNotes(newNotes);
+        showAlert("Note Deleted", "success");
     }
 
     const editNote = async (id, title, description, tag) =>{

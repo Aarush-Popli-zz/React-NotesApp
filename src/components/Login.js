@@ -1,7 +1,11 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import NoteContext from "../context/notes/NoteContext"
 
 const Login = () => {
+    const context = useContext(NoteContext);
+    const { showAlert } = context;
+
     const [credentials, setCredentials] = useState({email: "", password: ""});
     let navigate = useNavigate();
 
@@ -18,16 +22,17 @@ const Login = () => {
         if(json.success){
             localStorage.setItem('token', json.authtoken);
             navigate("/");
+            showAlert("Login Successful", "success");
         }
         else{
-            alert("Invalid");
+            showAlert("Invalid credentials", "danger");
         }
     }
     const onChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value })
     }
     return (
-        <div className='container col-md-6'>
+        <div className='container col-md-6 mt-3'>
             <div className="card">
                 <div className="card-header">Log In</div>
                 <div className="card-body">

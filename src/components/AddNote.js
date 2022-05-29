@@ -8,7 +8,7 @@ const AddNote = () => {
     const addnote = (e) => {
         e.preventDefault();
         addNote(note.title, note.description, note.tag)
-        showAlert("Note Added", "success")
+        showAlert("Note Added", "success");
         document.getElementById("note-form").reset();
         setNote({ title: "", description: "", tag: "" });
     }
@@ -18,7 +18,7 @@ const AddNote = () => {
     const clearnote = () =>{
         setNote({ title: "", description: "", tag: "" });
         document.getElementById("note-form").reset();
-        showAlert("Cleared Note", "success");
+        showAlert("Note Cleared", "success");
     }
     return (
         <div>

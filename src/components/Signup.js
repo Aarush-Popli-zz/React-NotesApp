@@ -6,27 +6,41 @@ const Signup = () => {
     const context = useContext(NoteContext);
     const { showAlert } = context;
 
-    const [credentials, setCredentials] = useState({name: "", email: "", password: "", cpassword: ""});
+    const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
     let navigate = useNavigate();
 
-    const handleSubmit = async (e)=>{
-        e.preventDefault();
-        const {name, email, password} = credentials
-        const response = await fetch("http://localhost:5000/api/auth/createuser", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({name, email, password})
-        });
-        const json = await response.json();
-        if(json.success){
-            localStorage.setItem('token', json.authtoken);
-            navigate("/");
-            showAlert("Welcome to Notes App", "success");
+    const match = ()=>{
+        if(credentials.password === credentials.cpassword){
+            return true;
         }
         else{
-            showAlert("Invalid details", "danger");
+            return false;
+        }
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (!match()) {
+            showAlert("Password does not match", "danger");
+        }
+        else {
+            const { name, email, password } = credentials
+            const response = await fetch("http://localhost:5000/api/auth/createuser", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password })
+            });
+            const json = await response.json();
+            if (json.success) {
+                localStorage.setItem('token', json.authToken);
+                navigate("/");
+                showAlert("Welcome to Notes App", "success");
+            }
+            else {
+                showAlert("Email already exists", "danger");
+            }
         }
     }
     const onChange = (e) => {
@@ -34,12 +48,13 @@ const Signup = () => {
     }
     return (
         <div className='container col-md-6 mt-3'>
+            <h2>Welcome to Notes App</h2>
             <div className="card">
                 <div className="card-header">Sign Up</div>
                 <div className="card-body">
                     <form className='g-1' onSubmit={handleSubmit}>
                         <div className="form-floating mb-2">
-                            <input type="text" className="form-control" id="authName" name='name' onChange={onChange} placeholder="Enter name" required />
+                            <input type="text" className="form-control" id="authName" name='name' minLength={3} onChange={onChange} placeholder="Enter name" required />
                             <label htmlFor="authName" className="form-label">Name</label>
                         </div>
                         <div className="form-floating mb-2">
@@ -54,7 +69,7 @@ const Signup = () => {
                             <input type="password" className="form-control" id="cauthPassword" name='cpassword' minLength={8} onChange={onChange} placeholder="Confirm password" required />
                             <label htmlFor="cauthPassword" className="form-label">Confirm password</label>
                         </div>
-                        <button type="submit" className="btn btn-primary col-md-2 float-end">Sign Up</button>
+                        <button disabled={credentials.password.length < 8 || credentials.cpassword.length < 8} type="submit" className="btn btn-primary col-md-2 float-end">Sign Up</button>
                     </form>
                 </div>
             </div>

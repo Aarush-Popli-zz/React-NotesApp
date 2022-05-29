@@ -4,13 +4,14 @@ import NoteContext from "../context/notes/NoteContext"
 
 const Navbar = () => {
     const context = useContext(NoteContext);
-    const { getUser } = context;
-    getUser();
+    const { showAlert } = context;
 
     let navigate = useNavigate();
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('name');
         navigate('/login');
+        showAlert("Logged Out", "success");
     }
     let location = useLocation();
     return (
@@ -33,7 +34,7 @@ const Navbar = () => {
                         <Link className="btn btn-light mx-1" to="/login" role="button">Log In</Link>
                         <Link className="btn btn-light mx-1" to="/signup" role="button">Sign Up</Link>
                     </div> : <div className="d-flex">
-                        <div className="nav-link text-light" style={{cursor: "default", userSelect: "none"}}>Hi, {localStorage.getItem("name")}</div>
+                        <div className="nav-link text-light" id='nameid' style={{cursor: "default", userSelect: "none"}}>Hi, {localStorage.getItem("name")}</div>
                         <Link className="btn btn-light mx-1" to="/login" role="button" onClick={handleLogout}>Log Out</Link>
                     </div>}
                 </div>

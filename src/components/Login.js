@@ -4,7 +4,7 @@ import NoteContext from "../context/notes/NoteContext"
 
 const Login = () => {
     const context = useContext(NoteContext);
-    const { showAlert } = context;
+    const { showAlert, getUser } = context;
 
     const [credentials, setCredentials] = useState({ email: "", password: "" });
     let navigate = useNavigate();
@@ -23,6 +23,8 @@ const Login = () => {
             localStorage.setItem('token', json.authToken);
             navigate("/");
             showAlert("Login Successful", "success");
+            await getUser();
+            // document.getElementById('nameid').innerHTML = "Hi, " + localStorage.getItem("name");
         }
         else {
             showAlert("Invalid credentials", "danger");

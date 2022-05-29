@@ -4,7 +4,7 @@ import NoteContext from "../context/notes/NoteContext"
 
 const Signup = () => {
     const context = useContext(NoteContext);
-    const { showAlert } = context;
+    const { showAlert, getUser } = context;
 
     const [credentials, setCredentials] = useState({ name: "", email: "", password: "", cpassword: "" });
     let navigate = useNavigate();
@@ -37,6 +37,8 @@ const Signup = () => {
                 localStorage.setItem('token', json.authToken);
                 navigate("/");
                 showAlert("Welcome to Notes App", "success");
+                await getUser();
+                // document.getElementById('nameid').innerHTML = "Hi, " + localStorage.getItem("name");
             }
             else {
                 showAlert("Email already exists", "danger");
